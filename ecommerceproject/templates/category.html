@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{ category.description |truncatewords:155 }}
+    {% else %}
+        Welcome to the food court where you can buy  awesome items .
+    {% endif %}
+{% endblock %}
+{% block title %}
+     {% if category %}
+        {{category.name}}-Shop cart
+    {% else %}
+        FOOD COURT PRODUCTS -shop cart
+    {% endif %}
+{% endblock %}
+{% block content %}
+    {% if category %}
+        <div class="row my_row_class">
+            <div class="mx-auto">
+                <p><a href="{% url 'foodcourt:allProdCat' %}">FOOD COURT BAKE FOODS ARE HERE</a>{{ category.name }}</p>
+            </div>
+        </div>
+    {% endif %}
+<div class="mx-auto">
+    {% if category %}
+        <img  class="my_image" src="{{category.image.url}}" style="height:350px;" alt="{{category.name}}">
+
+</div><br>
+<div>
+    <h1 class="text-center my_title">{{category.name}}</h1>
+    <p class="text-justify">{{category.desc}}</p>
+</div>
+{% else %}
+<div>
+    <center><img  class="my_image my_image_padding" src="{% static 'img/foodtemp3.png'  %}"  style="width:1100px;height:700px" alt=""></center>
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title"> FOODCOURT BAKE FOODS ARE HERE</h1>
+    <p class="text-justify">FOODCOURT bakery is an establishment that produces and sells flour-based food baked in an oven such as bread, cookies, cakes, pastries, and pies. Some retail bakeries are also categorized as cafés, serving coffee and tea to customers who wish to consume the baked goods on the premises.</p>
+</div>
+{% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12  col-md-4 xol-lg-4">
+            <div class="card text-center" style="min-width:18rem;">
+                <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" style="width:200px;height:250px;" alt="{{product.name}}"></a>
+            <div class="card-body">
+               <h4>{{product.name}}</h4>
+                <p>{{product.price}}</p>
+            </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}
+
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}"  class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+
+{% endblock %}
